@@ -12,7 +12,6 @@ def create_tables():
     """create a database name library then uses it to create two table named members and books"""
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("""CREATE DATABASE IF NOT EXISTS library_db""")
     cursor.execute("""USE library_db""")
     cursor.execute(
                     """CREATE TABLE IF NOT EXISTS members (
@@ -34,5 +33,3 @@ def create_tables():
     conn.commit()
     cursor.close()
     conn.close()
-
-# create_tables()

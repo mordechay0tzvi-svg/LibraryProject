@@ -47,13 +47,37 @@ class BooksDB:
     def update_book(id:int, data:dict) -> int:
         conn = connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("UPDATE books SET is_available = %s, borrowed_by_member_id = %s WHERE id = %s", (data["is_available"], data["borrowed_by_member_id"], id))
+        cursor.execute("UPDATE books SET title = %s, author = %s genre = %s WHERE id = %s", (data["title"], data["author"], data["genre"] id))
+        conn.commit()
+        updated = cursor.rowcount
+        cursor.close()
+        conn.close()
+        return updated
+    
+
+    def set_available(id:int, val:bool, member_id:int):
+        conn = connect()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE books SET is_available = %s, borrowed_by_member_id = %s WHERE id = %s", (val, member_id, id))
         conn.commit()
         updated = cursor.rowcount
         cursor.close()
         conn.close()
         return updated
 
+    
+
+    def count_total_books():
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute("select count(*) from books")
+        conn.commit()
+        count = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return count
+    
+    
 
 
 
