@@ -30,8 +30,8 @@ Books Table
 | title                 | Book title, required field, up to 50 characters                      |
 | author                | Author name, required field, up to 50 characters                     |
 | genre                 | Book genre (ENUM): Fiction / Non-Fiction / Science / History / Other |
-| available_is          | Whether the book is available for borrowing (FALSE = borrowed)       |
-| id_member_by_borrowed | ID of the member currently borrowing the book (NULL if available)    |
+| is_available          | Whether the book is available for borrowing (FALSE = borrowed)       |
+| borrowed_by_id_member | ID of the member currently borrowing the book (NULL if available)    |
 
 Members Table
 | Field         | Description                                          |
@@ -49,7 +49,7 @@ System Functions
 | tables_create  | Creates `books` and `members` tables if they don't exist (runs on server startup) |
 
 Books manager object methods
-| Method                                    | Description                                                   |
+| Method                                  Description                                                   |
 | ----------------------------------------- | ------------------------------------------------------------- |
 | create_book(data)                         | Create a new book (default: available=True, borrowed_by=NULL) |
 | get_all_books()                           | Retrieve all books                                            |
@@ -102,26 +102,6 @@ Members manager object methods
 | Reports  | GET    | http://localhost:8000/reports/top-member  | Most active borrowing member |
 
 
-
-
-
-
-"""CREATE DATABASE IF NOT EXISTS Library"""
-
-"""CREATE TABLE members (
-id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(50) NOT NULL,
-email VARCHAR(255) UNIQUE,
-is_active BOOL NOT NULL,
-total_borrows INT NOT NULL)"""
-
-"""CREATE TABLE books (
-id INT AUTO_INCREMENT PRIMARY KEY,
-title VARCHAR(50) NOT NULL,
-author VARCHAR(50) NOT NULL,
-genre ENUM('Fiction', 'Non-Fiction', 'Science', 'History', 'Other') NOT NULL,
-is_available BOOL NOT NULL,
-borrowed_by_member_id INT)"""
 
 
 
