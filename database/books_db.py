@@ -22,7 +22,7 @@ class BooksDB:
         conn.close()
 
 
-    def get_all_members():
+    def get_all_books():
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("select * from books")
@@ -31,6 +31,18 @@ class BooksDB:
         cursor.close()
         conn.close()
         return all_books
+
+    def get_book_by_id(id:int):
+        conn = connect()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("select * from books where id = %s", (id))
+        book = cursor.fetchone()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return book
+
+
 
 
 
