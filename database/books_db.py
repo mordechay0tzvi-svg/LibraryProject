@@ -11,7 +11,7 @@ class BooksDB:
         self.password='library'
         create()
 
-    def create_book(data:dict) -> int:
+    def create_book(self, data:dict) -> int:
         conn = connect()
         cursor = conn.cursor()
         sql = "INSERT INTO books (title, author, genre, is_available, borrowed_by_member_id) VALUES (%s, %s, %s, %s, %s)"
@@ -24,7 +24,7 @@ class BooksDB:
         return new_id
 
 
-    def get_all_books() -> list:
+    def get_all_books(self) -> list:
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("select * from books")
@@ -34,7 +34,8 @@ class BooksDB:
         conn.close()
         return all_books
 
-    def get_book_by_id(id:int) -> dict:
+
+    def get_book_by_id(self, id:int) -> dict:
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("select * from books where id = %s", (id,))
@@ -44,10 +45,11 @@ class BooksDB:
         conn.close()
         return book
     
-    def update_book(id:int, data:dict) -> int:
+
+    def update_book(self, id:int, data:dict) -> int:
         conn = connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("UPDATE books SET title = %s, author = %s genre = %s WHERE id = %s", (data["title"], data["author"], data["genre"] id))
+        cursor.execute("UPDATE books SET title = %s, author = %s genre = %s WHERE id = %s", (data["title"], data["author"], data["genre"], id))
         conn.commit()
         updated = cursor.rowcount
         cursor.close()
@@ -55,7 +57,7 @@ class BooksDB:
         return updated
     
 
-    def set_available(id:int, val:bool, member_id:int):
+    def set_available(self, id:int, val:bool, member_id:int):
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("UPDATE books SET is_available = %s, borrowed_by_member_id = %s WHERE id = %s", (val, member_id, id))
@@ -65,17 +67,28 @@ class BooksDB:
         conn.close()
         return updated
 
-    
 
-    def count_total_books():
+    def count_total_books(self):
         conn = connect()
         cursor = conn.cursor()
         cursor.execute("select count(*) from books")
         conn.commit()
-        count = cursor.fetchone()
+        count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
         return count
+    
+    
+    def count_available_books(self):
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute("select count(*) from books where is_available")
+        conn.commit()
+        count = cursor.fetchone()[0]
+        cursor.close()
+        conn.close()
+        return count
+
     
     
 
