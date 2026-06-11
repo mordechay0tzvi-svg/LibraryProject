@@ -2,30 +2,28 @@ import mysql.connector
 
 def get_connection():
     """returns a connection to database"""
-    return mysql.connector.connect(host="localhost",
+    return mysql.connector.connect(host="127.0.0.1",
                                    port=3306,
-                                   user='root',
-                                   database="library",
-                                   password='library')
+                                   user='library_user',
+                                   password='secret',
+                                   database="library_db")
 
 def create_tables():
     """create a database name library then uses it to create two table named members and books"""
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("""CREATE DATABASE IF NOT EXISTS Library""")
-    conn.commit()
-    cursor.execute("""USE Library""")
+    # cursor.execute("""CREATE DATABASE IF NOT EXISTS library""")
+    cursor.execute("""USE library_db""")
     cursor.execute(
-                    """CREATE TABLE members (
+                    """CREATE TABLE IF NOT EXISTS members (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     name VARCHAR(50) NOT NULL,
                     email VARCHAR(255) UNIQUE NOT NULL,
                     is_active BOOL NOT NULL,
                     total_borrows INT NOT NULL)"""
                     )
-    conn.commit()
     cursor.execute(
-                    """CREATE TABLE books (
+                    """CREATE TABLE IF NOT EXISTS books (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     title VARCHAR(50) NOT NULL,
                     author VARCHAR(50) NOT NULL,
@@ -36,3 +34,4 @@ def create_tables():
     conn.commit()
     cursor.close()
     conn.close()
+
