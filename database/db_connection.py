@@ -2,17 +2,17 @@ import mysql.connector
 
 def get_connection():
     """returns a connection to database"""
-    return mysql.connector.connect(host="127.0.0.1",
+    return mysql.connector.connect(host="localhost",
                                    port=3306,
-                                   user='library_user',
-                                   password='secret',
-                                   database="library_db")
+                                   user='root',
+                                   password='library'
+                                   )
 
 def create_tables():
     """create a database name library then uses it to create two table named members and books"""
     conn = get_connection()
     cursor = conn.cursor()
-    # cursor.execute("""CREATE DATABASE IF NOT EXISTS library""")
+    cursor.execute("""CREATE DATABASE IF NOT EXISTS library_db""")
     cursor.execute("""USE library_db""")
     cursor.execute(
                     """CREATE TABLE IF NOT EXISTS members (
@@ -35,3 +35,4 @@ def create_tables():
     cursor.close()
     conn.close()
 
+# create_tables()
