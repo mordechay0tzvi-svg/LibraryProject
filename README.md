@@ -106,7 +106,7 @@ Members manager object methods
 
 
 
-"""CREATE DATABASE IF NOT EXISTS Library_db"""
+"""CREATE DATABASE IF NOT EXISTS Library"""
 
 """CREATE TABLE members (
 id INT AUTO_INCREMENT PRIMARY KEY,
