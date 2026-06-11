@@ -78,7 +78,7 @@ class BooksDB:
         conn.close()
         return count
     
-    
+
     def count_available_books(self):
         conn = connect()
         cursor = conn.cursor()
@@ -89,7 +89,37 @@ class BooksDB:
         conn.close()
         return count
 
+    def count_borrowed_books(self):
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute("select count(*) from books where is_available = 0")
+        conn.commit()
+        count = cursor.fetchone()[0]
+        cursor.close()
+        conn.close()
+        return count
+     
+    def count_by_genre(self, genre):
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute("select count(*) from books where genre = %s",(genre,))
+        conn.commit()
+        count = cursor.fetchone()[0]
+        cursor.close()
+        conn.close()
+        return count
+
+    def count_active_borrows_by_member(self, member_id):
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute("select count(*) from books where member_id = %s",(member_id))
+        conn.commit()
+        count = cursor.fetchone()[0]
+        cursor.close()
+        conn.close()
+        return count
     
+
     
 
 
