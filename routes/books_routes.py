@@ -43,6 +43,8 @@ def update_book(id:int, data:Book=Body(...)):
 
 @app.put("/books/{book_id}/borrow/{member_id}")
 def borrow(book_id:int, member_id:int):
+    if not members.get_member_by_id(id)["is_active"]:
+        raise HTTPException(400,"non active members can't borrow books")
     book = books.get_book_by_id(book_id)
     if not book:
         raise HTTPException(status_code=404, detail="book not found")
