@@ -4,10 +4,10 @@ from  db_connection import create_tables as create
 
 class BooksDB:
     def  __init__(self):
-        self.host="localhost",
-        self.port=3306,
-        self.user='root',
-        self.database="library",
+        self.host="localhost"
+        self.port=3306
+        self.user='root'
+        self.database="library"
         self.password='library'
         create()
 
@@ -49,7 +49,7 @@ class BooksDB:
     def update_book(self, id:int, data:dict) -> int:
         conn = connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("UPDATE books SET title = %s, author = %s genre = %s WHERE id = %s", (data["title"], data["author"], data["genre"], id))
+        cursor.execute("UPDATE books SET title = %s, author = %s, genre = %s WHERE id = %s", (data["title"], data["author"], data["genre"], id))
         conn.commit()
         updated = cursor.rowcount
         cursor.close()
@@ -112,13 +112,16 @@ class BooksDB:
     def count_active_borrows_by_member(self, member_id):
         conn = connect()
         cursor = conn.cursor()
-        cursor.execute("select count(*) from books where member_id = %s",(member_id))
+        cursor.execute("select count(*) from books where member_id = %s",(member_id,))
         conn.commit()
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
         return count
     
+    
+    
+
 
     
 
