@@ -1,11 +1,12 @@
-from fastapi import FastAPI, Body, Query, HTTPException
+from fastapi import APIRouter, Body, Query, HTTPException
 import uvicorn
 from pydantic import BaseModel
 from database.books_db import BooksDB
-from database.members_db import MembersDB
+from database.members_db import MembersDB 
 books = BooksDB()
 members = MembersDB()
-app = FastAPI()
+
+app = APIRouter()
 
 @app.get("/reports/summary")
 def summary():
@@ -22,3 +23,5 @@ def top_member():
     return members.get_top_member()
 
 
+# if __name__=="main":    
+#     uvicorn.run(app, host="localhost", port=8000)   

@@ -1,11 +1,11 @@
-from fastapi import FastAPI, Body, Query, HTTPException
+from fastapi import APIRouter, Body, Query, HTTPException
 import uvicorn
 from pydantic import BaseModel
 from database.books_db import BooksDB
 from database.members_db import MembersDB
 books = BooksDB()
 members = MembersDB()
-app = FastAPI()
+app = APIRouter()
 
 class Book(BaseModel):
     name:str
@@ -69,7 +69,8 @@ def return_book(book_id:int, member_id:int):
     return {"message":f"member {member_id} returned book {book_id}"}
 
 
-    
+# if __name__=="main":    
+#     uvicorn.run(app, host="localhost", port=8000)   
 
 
 

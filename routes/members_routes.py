@@ -1,11 +1,11 @@
-from fastapi import FastAPI, Body, Query, HTTPException
+from fastapi import APIRouter, Body, Query, HTTPException
 import uvicorn
 from pydantic import BaseModel
 from database.books_db import BooksDB
 from database.members_db import MembersDB
 books = BooksDB()
 members = MembersDB()
-app = FastAPI()
+app = APIRouter()
 
 class Member(BaseModel):
     name:str
@@ -49,3 +49,6 @@ def activate_member(id:int):
     if not changed:
         raise HTTPException(404, "member not found")
     return {"message":f"member {id} activate"}
+
+# if __name__=="main":
+#     uvicorn.run(app, host="localhost", port=8000)
