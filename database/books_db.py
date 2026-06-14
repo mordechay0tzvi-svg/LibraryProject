@@ -29,7 +29,6 @@ class BooksDB:
         cursor = conn.cursor(dictionary=True)
         cursor.execute("select * from books")
         all_books = cursor.fetchall()
-        conn.commit()
         cursor.close()
         conn.close()
         return all_books
@@ -72,7 +71,6 @@ class BooksDB:
         conn = connect()
         cursor = conn.cursor()
         cursor.execute("select count(*) from books")
-        conn.commit()
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
@@ -83,7 +81,6 @@ class BooksDB:
         conn = connect()
         cursor = conn.cursor()
         cursor.execute("select count(*) from books where is_available")
-        conn.commit()
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
@@ -93,7 +90,6 @@ class BooksDB:
         conn = connect()
         cursor = conn.cursor()
         cursor.execute("select count(*) from books where is_available = 0")
-        conn.commit()
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
@@ -103,7 +99,6 @@ class BooksDB:
         conn = connect()
         cursor = conn.cursor()
         cursor.execute("select count(*) from books where genre = %s",(genre,))
-        conn.commit()
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
@@ -113,7 +108,6 @@ class BooksDB:
         conn = connect()
         cursor = conn.cursor()
         cursor.execute("select count(*) from books where member_id = %s",(member_id,))
-        conn.commit()
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()

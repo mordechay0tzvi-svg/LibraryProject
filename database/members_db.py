@@ -1,6 +1,8 @@
 from  db_connection import get_connection as connect 
 from  db_connection import create_tables as create
-class MebersDB:
+
+
+class MembersDB:
     def  __init__(self):
         self.host="localhost"
         self.port=3306
@@ -96,11 +98,13 @@ class MebersDB:
     def get_top_member(self):
         conn = connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute('select * from members where total_borrows = max(total_borrows)')
+        cursor.execute('select * from members order by total_borrows asc limit 1')
         top = cursor.fetchone()
         cursor.close()
         conn.close()
-        return top 
+        return top
+    
+     
 
 
      
