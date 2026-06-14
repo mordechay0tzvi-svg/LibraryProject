@@ -2,7 +2,9 @@ from fastapi import FastAPI, Body, Query, HTTPException
 import uvicorn
 from pydantic import BaseModel
 from database.books_db import BooksDB
+from database.members_db import MembersDB
 books = BooksDB()
+members = MembersDB()
 app = FastAPI()
 
 class Book(BaseModel):
@@ -51,6 +53,7 @@ def borrow(book_id:int, member_id:int):
     borrowed = books.set_available(book_id, False, member_id)
     if not borrowed:
         raise HTTPException(status_code=404, detail="member not found")
+    members.increment_borrows(member_id)
     return {"message":f"book {book_id} borrowed"}
 
 @app.put("/books/{book_id}/return/{member_id}")
