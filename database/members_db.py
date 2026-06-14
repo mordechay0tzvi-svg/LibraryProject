@@ -1,5 +1,5 @@
-from  db_connection import get_connection as connect 
-from  db_connection import create_tables as create
+from  database.db_connection import get_connection as connect 
+from  database.db_connection import create_tables as create
 
 
 class MembersDB:

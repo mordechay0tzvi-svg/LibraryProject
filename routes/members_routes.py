@@ -13,7 +13,7 @@ class Member(BaseModel):
 
 @app.post("/members")
 def add_member(data:Member=Body(...)):
-    new = members.create_member(**data.model_dump())
+    new = members.create_memberdata.model_dump()
     if not new:
         return {"message":"member not added"}
     return {"message":f"member no. {new} added"}
@@ -50,5 +50,3 @@ def activate_member(id:int):
         raise HTTPException(404, "member not found")
     return {"message":f"member {id} activate"}
 
-# if __name__=="main":
-#     uvicorn.run(app, host="localhost", port=8000)

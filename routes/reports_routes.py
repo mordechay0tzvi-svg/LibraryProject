@@ -22,6 +22,4 @@ def genres():
 def top_member():
     return members.get_top_member()
 
-
-# if __name__=="main":    
-#     uvicorn.run(app, host="localhost", port=8000)   
+  

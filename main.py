@@ -15,5 +15,5 @@ def root():
     return {"message": "Welcome to the Library API"}
 
 if __name__=="__main__":
-    uvicorn.run(app, host="localhost", port=8000, reload=True)
+    uvicorn.run(app, host="localhost", port=8000)
 

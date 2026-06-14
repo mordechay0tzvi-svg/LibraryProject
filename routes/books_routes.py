@@ -69,8 +69,6 @@ def return_book(book_id:int, member_id:int):
     return {"message":f"member {member_id} returned book {book_id}"}
 
 
-# if __name__=="main":    
-#     uvicorn.run(app, host="localhost", port=8000)   
 
 
 
