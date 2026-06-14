@@ -56,7 +56,7 @@ class BooksDB:
         return updated
     
 
-    def set_available(self, id:int, val:bool, member_id:int):
+    def set_available(self, id:int, val:bool, member_id:int|bool):
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("UPDATE books SET is_available = %s, borrowed_by_member_id = %s WHERE id = %s", (val, member_id, id))

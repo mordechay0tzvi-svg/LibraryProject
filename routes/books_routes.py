@@ -63,7 +63,7 @@ def return_book(book_id:int, member_id:int):
         raise HTTPException(status_code=404, detail="book not found")
     if book["borrowed_by_member_id"] != member_id:
         raise HTTPException(status_code=400, detail='only borrowed allowed to return book')
-    returned = books.set_available(book_id, True, member_id)
+    returned = books.set_available(book_id, True, None)
     if not returned:
         raise HTTPException(status_code=404, detail="book or member not found")
     return {"message":f"member {member_id} returned book {book_id}"}
