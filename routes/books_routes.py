@@ -39,7 +39,27 @@ def update_book(id:int, data:Book=Body(...)):
         raise HTTPException(status_code=404, detail="book not found")
     return {"message":f"book {id}, updated"}
 
+@app.put("/books/{book_id}/borrow/{member_id}")
+def borrow(book_id:int, member_id:int):
+    if books.count_active_borrows_by_member(member_id) == 3:
+        raise HTTPException(status_code=400, detail="member has reaced maximum borrows")
+    borrowed = books.set_available(book_id, False, member_id)
+    if not borrowed:
+        raise HTTPException(status_code=404, detail="book or member not found")
+    return {"message":f"book {book_id} returned"}
 
+@app.put("/books/{book_id}/borrow/{member_id}")
+def return_book(book_id:int, member_id:int):
+    book = books.get_book_by_id(book_id)
+    if book["member_id"] != member_id:
+        raise HTTPException(status_code=400, detail='only borrowed allowed to return book')
+    returned = books.set_available(book_id, True, member_id)
+    if not returned:
+        raise HTTPException(status_code=404, detail="book or member not found")
+    return {"message":f"member {member_id} returned book {book_id}"}
+
+
+    
 
 
 
