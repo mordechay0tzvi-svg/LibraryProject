@@ -30,6 +30,16 @@ def book_by_id(id:int):
         raise HTTPException(status_code=404, detail="book not found")
     return book
 
+@app.put("books/{id}")
+def update_book(id:int, data:Book=Body(...)):
+    if data["genre"] not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
+        raise HTTPException(status_code=400, detail="not valid genre")
+    updated = books.update_book(id, **data.model_dump())
+    if not updated:
+        raise HTTPException(status_code=404, detail="book not found")
+    return {"message":f"book {id}, updated"}
+
+
 
 
 
