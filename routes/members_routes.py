@@ -29,3 +29,23 @@ def id_member(id:int):
         raise HTTPException(status_code=404, detail="book not found")
     return member
 
+@app.put("/members/{id}")
+def update_member(id:int, data:Member=Body(...)):
+    member = members.update_member()
+    if not member:
+        raise HTTPException(404, "member not found")
+    return {"message":f"member {id} updated"}
+
+@app.put("/members/{id}/deactivate")
+def deactivate_member(id:int):
+    changed = members.deactivate_member(id)
+    if not changed:
+        raise HTTPException(404, "member not found")
+    return {"message":f"member {id} deactivate"}
+
+@app.put("/members/{id}/activate")
+def activate_member(id:int):
+    changed = members.activate_member(id)
+    if not changed:
+        raise HTTPException(404, "member not found")
+    return {"message":f"member {id} activate"}
