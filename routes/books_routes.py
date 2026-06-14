@@ -12,11 +12,18 @@ class Book(BaseModel):
 
 @app.post("/books")
 def create_book(data:Book=Body(...)):
-    data = data.model_dump()
-    new = books.create_book(**data)
+    if data["genre"] not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
+        raise HTTPException(status_code=400, detail="not valid genre")
+    new = books.create_book(**data.model_dump())
     if not new:
         return {"message":"book not created"}
     return {"message":f"book no. {new} created"}
+
+@app.get("/books")
+def all_books():
+    return books.get_all_books()
+
+
 
 
 
