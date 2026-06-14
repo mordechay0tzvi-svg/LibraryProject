@@ -1,18 +1,13 @@
-from  database.db_connection import get_connection as connect 
-from  database.db_connection import create_tables as create
+from  database.db_connection import connectionDB
+connector = connectionDB()
 
 
 class MembersDB:
     def  __init__(self):
-        self.host="localhost"
-        self.port=3306
-        self.user='root'
-        self.database="library_db"
-        self.password='library'
-        create()
+        connector.create_tables()
     
     def create_member(self, data:dict):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor()
         sql = ("insert into members (name, email, is_active, total_borrows) values (%s,%s,%s,%s)")
         values = (data['name'], data['email'], True, 0)
@@ -24,7 +19,7 @@ class MembersDB:
         return added
     
     def get_all_members(self):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('select * from members')
         rows = cursor.fetchall()
@@ -33,7 +28,7 @@ class MembersDB:
         return rows
     
     def get_member_by_id(self, id:int):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('select * from members where id = %s',(id,))
         member = cursor.fetchone()
@@ -42,7 +37,7 @@ class MembersDB:
         return member
     
     def update_member(self, id:int, data:dict):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('update members set name = %s, email = %s where id = %s',(data['name'], data['email'], id))
         updated = cursor.rowcount
@@ -54,7 +49,7 @@ class MembersDB:
     def deactivate_member(self, id:int):
         if not self.get_member_by_id(id)['is_active']:
             return {"message":"memeber is already deactive"}
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('update members set is_active = %s where id = %s',(False , id))
         updated = cursor.rowcount
@@ -66,7 +61,7 @@ class MembersDB:
     def activate_member(self, id:int):
         if self.get_member_by_id(id)['is_active']:
             return {"message":"memeber is already active"}
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('update members set is_active = %s where id = %s',(True , id))
         updated = cursor.rowcount
@@ -76,7 +71,7 @@ class MembersDB:
         return updated
     
     def increment_borrows(self, id:int):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor()
         cursor.execute('select total_borrows from members where id = %s', (id,))
         total = cursor.fetchone()
@@ -91,7 +86,7 @@ class MembersDB:
         return increased
     
     def count_active_members(self):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('select count(*) as active from members where is_active')
         active = cursor.fetchone()['active']
@@ -100,7 +95,7 @@ class MembersDB:
         return active
     
     def get_top_member(self):
-        conn = connect()
+        conn = connector.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('select * from members order by total_borrows desc limit 1')
         top = cursor.fetchone()
