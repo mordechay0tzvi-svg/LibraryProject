@@ -23,6 +23,12 @@ def create_book(data:Book=Body(...)):
 def all_books():
     return books.get_all_books()
 
+@app.get("/books/{id}")
+def book_by_id(id:int):
+    book = books.get_book_by_id(id)
+    if not book:
+        raise HTTPException(status_code=404, detail="book not found")
+    return book
 
 
 
