@@ -13,7 +13,7 @@ class Member(BaseModel):
 
 @app.post("/members")
 def add_member(data:Member=Body(...)):
-    new = members.create_memberdata.model_dump()
+    new = members.create_member(data.model_dump())
     if not new:
         return {"message":"member not added"}
     return {"message":f"member no. {new} added"}
@@ -31,7 +31,7 @@ def id_member(id:int):
 
 @app.put("/members/{id}")
 def update_member(id:int, data:Member=Body(...)):
-    member = members.update_member()
+    member = members.update_member(id, data.model_dump())
     if not member:
         raise HTTPException(404, "member not found")
     return {"message":f"member {id} updated"}

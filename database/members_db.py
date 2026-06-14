@@ -7,7 +7,7 @@ class MembersDB:
         self.host="localhost"
         self.port=3306
         self.user='root'
-        self.database="library"
+        self.database="library_db"
         self.password='library'
         create()
     
@@ -44,7 +44,7 @@ class MembersDB:
     def update_member(self, id:int, data:dict):
         conn = connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute('update members set name = %s, email = %s from members where id = %s',(data['name'], data['email'], id))
+        cursor.execute('update members set name = %s, email = %s where id = %s',(data['name'], data['email'], id))
         updated = cursor.rowcount
         conn.commit()
         cursor.close()
@@ -52,6 +52,8 @@ class MembersDB:
         return updated
     
     def deactivate_member(self, id:int):
+        if not self.get_member_by_id(id)['is_active']:
+            return {"message":"memeber is already deactive"}
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('update members set is_active = %s where id = %s',(False , id))
@@ -62,6 +64,8 @@ class MembersDB:
         return updated
     
     def activate_member(self, id:int):
+        if self.get_member_by_id(id)['is_active']:
+            return {"message":"memeber is already active"}
         conn = connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('update members set is_active = %s where id = %s',(True , id))
@@ -98,7 +102,7 @@ class MembersDB:
     def get_top_member(self):
         conn = connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute('select * from members order by total_borrows asc limit 1')
+        cursor.execute('select * from members order by total_borrows desc limit 1')
         top = cursor.fetchone()
         cursor.close()
         conn.close()

@@ -8,7 +8,7 @@ members = MembersDB()
 app = APIRouter()
 
 class Book(BaseModel):
-    name:str
+    title:str
     author:str
     genre:str
 
@@ -16,7 +16,7 @@ class Book(BaseModel):
 def create_book(data:Book=Body(...)):
     if data.genre not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
         raise HTTPException(status_code=400, detail="not valid genre")
-    new = books.create_book(**data.model_dump())
+    new = books.create_book(data.model_dump())
     if not new:
         return {"message":"book not created"}
     return {"message":f"book no. {new} created"}
@@ -61,7 +61,7 @@ def return_book(book_id:int, member_id:int):
     book = books.get_book_by_id(book_id)
     if not book:
         raise HTTPException(status_code=404, detail="book not found")
-    if book["member_id"] != member_id:
+    if book["borrowed_by_member_id"] != member_id:
         raise HTTPException(status_code=400, detail='only borrowed allowed to return book')
     returned = books.set_available(book_id, True, member_id)
     if not returned:
