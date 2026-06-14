@@ -12,7 +12,7 @@ class Book(BaseModel):
 
 @app.post("/books")
 def create_book(data:Book=Body(...)):
-    if data["genre"] not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
+    if data.genre not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
         raise HTTPException(status_code=400, detail="not valid genre")
     new = books.create_book(**data.model_dump())
     if not new:
@@ -30,9 +30,9 @@ def book_by_id(id:int):
         raise HTTPException(status_code=404, detail="book not found")
     return book
 
-@app.put("books/{id}")
+@app.put("/books/{id}")
 def update_book(id:int, data:Book=Body(...)):
-    if data["genre"] not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
+    if data.genre not in ["Fiction", 'Non-Fiction', 'Science', 'History',  "Other"]:
         raise HTTPException(status_code=400, detail="not valid genre")
     updated = books.update_book(id, **data.model_dump())
     if not updated:
@@ -41,16 +41,23 @@ def update_book(id:int, data:Book=Body(...)):
 
 @app.put("/books/{book_id}/borrow/{member_id}")
 def borrow(book_id:int, member_id:int):
+    book = books.get_book_by_id(book_id)
+    if not book:
+        raise HTTPException(status_code=404, detail="book not found")
+    if not book["is_available"]:
+        raise HTTPException(status_code=400, detail="book is already borrowed")
     if books.count_active_borrows_by_member(member_id) == 3:
         raise HTTPException(status_code=400, detail="member has reaced maximum borrows")
     borrowed = books.set_available(book_id, False, member_id)
     if not borrowed:
-        raise HTTPException(status_code=404, detail="book or member not found")
-    return {"message":f"book {book_id} returned"}
+        raise HTTPException(status_code=404, detail="member not found")
+    return {"message":f"book {book_id} borrowed"}
 
-@app.put("/books/{book_id}/borrow/{member_id}")
+@app.put("/books/{book_id}/return/{member_id}")
 def return_book(book_id:int, member_id:int):
     book = books.get_book_by_id(book_id)
+    if not book:
+        raise HTTPException(status_code=404, detail="book not found")
     if book["member_id"] != member_id:
         raise HTTPException(status_code=400, detail='only borrowed allowed to return book')
     returned = books.set_available(book_id, True, member_id)
