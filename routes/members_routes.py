@@ -18,3 +18,14 @@ def add_member(data:Member=Body(...)):
         return {"message":"member not added"}
     return {"message":f"member no. {new} added"}
 
+@app.get("/members")
+def all_members():
+    return members.get_all_members()
+
+@app.get("/members/{id}")
+def id_member(id:int):
+    member = members.get_member_by_id(id)
+    if not member:
+        raise HTTPException(status_code=404, detail="book not found")
+    return member
+
